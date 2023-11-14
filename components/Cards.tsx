@@ -19,33 +19,35 @@ interface CardProps {
   };
   const styles = StyleSheet.create({
     card: {
-        borderRadius: 6,
+        borderRadius: 20,
         overflow: 'hidden',
         elevation: 4,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 3,
-        padding: 10,
-        margin: 10,
+        marginVertical: 10,
+        marginHorizontal: 20,
     },
     cardImage: {
       width: '100%',
       height: 200,
       justifyContent: 'flex-end',
-      paddingHorizontal: 10,
-      paddingBottom: 10,
+      paddingHorizontal: 20,
+      paddingBottom: 25,
       borderRadius: 20,
     },
     titleText: {
         fontSize: 24,
         fontWeight: 'bold',
         color: 'white',
+        font: 'Roboto Condensed',
       },
-      dateText: {
+    dateText: {
         fontSize: 16,
-        color: 'white', 
-      }
+        color: '#60BCF0', 
+        font: 'Roboto Condensed',
+    }
     
   });
 

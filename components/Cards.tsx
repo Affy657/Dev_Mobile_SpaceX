@@ -1,22 +1,77 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, ImageSourcePropType } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ImageSourcePropType, FlatList, TouchableOpacity } from 'react-native';
+import { Link, type LinkProps } from 'expo-router';
 
-interface CardProps {
-    id: number;
-    date: string;
-    title: string;
-    imageUri: ImageSourcePropType;
+const image1 = require('../assets/images/icon.png');
+
+const DATA = [
+  {
+    id :1,
+    date:'2021-01-01',
+    title:"Card Title api" ,
+    imageUri: image1
+  },
+  {
+    id :2,
+    date:'2021-01-01',
+    title:"Card Title api" ,
+    imageUri: image1
+  },
+  {
+    id :3,
+    date:'2021-01-01',
+    title:"Card Title api" ,
+    imageUri: image1
+  },
+  {
+    id :4,
+    date:'2021-01-01',
+    title:"Card Title api" ,
+    imageUri: image1
+  },
+]
+
+
+
+type CardType = {
+  title: string,
+  date: string,
+  imageUri: string,
+};
+
+
+const Card = ({title, date, imageUri}:CardType & { imageUri: ImageSourcePropType }) => {
+  const href = {
+    pathname: "/(tabs)/LaunchDetail/[id]",
+    //params: { id: id },
   }
-  const Card: React.FC<CardProps> = ({ title, imageUri,date }) => {
-    return (
-      <View style={styles.card}>
-        <ImageBackground style={styles.cardImage} source={imageUri} resizeMode="cover" >
+
+  return (
+    <View style={styles.card}>
+      <Link
+        // @ts-ignore
+        href={href}
+      >
+      <ImageBackground style={styles.cardImage} source={imageUri} resizeMode="cover">
         <Text style={styles.dateText}>{date}</Text>
         <Text style={styles.titleText}>{title}</Text>
-        </ImageBackground>
-      </View>
+      </ImageBackground>
+    </Link>
+    </View>
+  );
+};
+
+
+  const Cards = () => {
+    return (
+        <FlatList style={styles.scrollView}
+          data={DATA}
+          renderItem={({ item }) => Card({title: item.title, date: item.date, imageUri: item.imageUri})}
+          keyExtractor={card => card.id.toString()}
+        />
     );
   };
+
   const styles = StyleSheet.create({
     card: {
         borderRadius: 20,
@@ -41,15 +96,20 @@ interface CardProps {
         fontSize: 24,
         fontWeight: 'bold',
         color: 'white',
-        font: 'Roboto Condensed',
+        //font: 'Roboto Condensed',
       },
     dateText: {
         fontSize: 16,
         color: '#60BCF0', 
-        font: 'Roboto Condensed',
-    }
+        //font: 'Roboto Condensed',
+    },
+    scrollView: {
+      backgroundColor: 'pink',
+      marginHorizontal: 25,
+      width: '100%'
+    },
     
   });
 
-  export default Card;
+  export default Cards;
       

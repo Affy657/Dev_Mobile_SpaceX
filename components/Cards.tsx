@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, ImageSourcePropType, FlatList, TouchableOpacity } from 'react-native';
 import { Link, type LinkProps } from 'expo-router';
+import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query'
+import { useLaunches } from '../lib/api'
 
 const image1 = require('../assets/images/icon.png');
 
@@ -31,8 +33,6 @@ const DATA = [
   },
 ]
 
-
-
 type CardType = {
   title: string,
   date: string,
@@ -40,11 +40,12 @@ type CardType = {
 };
 
 
-const Card = ({title, date, imageUri}:CardType & { imageUri: ImageSourcePropType }) => {
+const Card = ({title, date, imageUri}:CardType & { imageUri: ImageSourcePropType }& {cardId:any, setCardId:any}) => {
   const href = {
     pathname: "/(tabs)/LaunchDetail/[id]",
     //params: { id: id },
   }
+  
 
   return (
     <View style={styles.card}>
@@ -62,12 +63,14 @@ const Card = ({title, date, imageUri}:CardType & { imageUri: ImageSourcePropType
 };
 
 
-  const Cards = () => {
+  const Cards = ({cardId}:any,{setCardId}:any) => {
+    const { status, data, error, isFetching } = useLaunches()
+    console.log(status, data, error, isFetching)
     return (
         <FlatList style={styles.scrollView}
-          data={DATA}
-          renderItem={({ item }) => Card({title: item.title, date: item.date, imageUri: item.imageUri})}
-          keyExtractor={card => card.id.toString()}
+          data={data}
+          renderItem={({ item }) => Card({title: item.mission_name, date: item.launch_date_utc, imageUri: item.imageUri, cardId, setCardId})}
+          keyExtractor={card => cardId.toString()}
         />
     );
   };

@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "eslint --ext .ts,.tsx *"
+    "lint": "eslint --ext .ts,.tsx \"**/*.{ts,tsx}\""
   },
   "jest": {
     "preset": "jest-expo"

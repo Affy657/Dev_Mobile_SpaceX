@@ -1,31 +1,42 @@
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import { 
+  PermissionsAndroid,
+  StyleSheet,
+  View,
+ } from 'react-native';
 
-import EditScreenInfo from '../../components/EditScreenInfo';
-import { Text, View } from '../../components/Themed';
+import TopBar from '../../components/TopBar';
+import Cards from '../../components/Cards';
 
-export default function TabOneScreen() {
+const requestInternetPermission = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.INTERNET
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('You can use the internet');
+    } else {
+      console.log('Internet permission denied');
+    }
+  } catch (err) {
+    console.warn("err :"+err);
+  }
+};
+
+export default function TabHomePageScreen() {
+ // requestInternetPermission();
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+    <View style={styles.scroll}>
+      <TopBar></TopBar>
+      <Cards></Cards>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  scroll: {
+  flex: 1,
+  alignItems: 'center',
+  justifyContent: 'center',
   },
 });

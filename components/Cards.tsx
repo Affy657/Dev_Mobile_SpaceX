@@ -1,37 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, ImageSourcePropType, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image } from 'react-native';
 import { Link, type LinkProps } from 'expo-router';
-import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query'
 import { useLaunches } from '../lib/api'
+import { LaunchData } from '../types/api-type'
 
-const image1 = require('../assets/images/icon.png');
-
-const DATA = [
-  {
-    id :1,
-    date:'2021-01-01',
-    title:"Card Title api" ,
-    imageUri: image1
-  },
-  {
-    id :2,
-    date:'2021-01-01',
-    title:"Card Title api" ,
-    imageUri: image1
-  },
-  {
-    id :3,
-    date:'2021-01-01',
-    title:"Card Title api" ,
-    imageUri: image1
-  },
-  {
-    id :4,
-    date:'2021-01-01',
-    title:"Card Title api" ,
-    imageUri: image1
-  },
-]
 
 type CardType = {
   title: string,
@@ -39,38 +11,49 @@ type CardType = {
   imageUri: string,
 };
 
-
-const Card = ({title, date, imageUri}:CardType & { imageUri: ImageSourcePropType }& {cardId:any, setCardId:any}) => {
+const Card = ({title, date, imageUri}:CardType & { imageUri: string }) => {
   const href = {
     pathname: "/(tabs)/LaunchDetail/[id]",
     //params: { id: id },
   }
   
-
+  console.log(imageUri)
   return (
     <View style={styles.card}>
       <Link
         // @ts-ignore
         href={href}
       >
-      <ImageBackground style={styles.cardImage} source={imageUri} resizeMode="cover">
+      <Image style={styles.cardImage} source={{uri : imageUri}} resizeMode="cover" onError={console.log}/>
+      <View style={styles.textContainer}>
         <Text style={styles.dateText}>{date}</Text>
         <Text style={styles.titleText}>{title}</Text>
-      </ImageBackground>
+      </View>
     </Link>
     </View>
   );
 };
 
 
-  const Cards = ({cardId}:any,{setCardId}:any) => {
+  const Cards = () => {
     const { status, data, error, isFetching } = useLaunches()
-    console.log(status, data, error, isFetching)
+    //console.log(status, data, error, isFetching)
+
+  console.log(error)
+
+  if (error) {
+    return <Text>Error: {error.message}</Text>
+  }
+
+  if (status === 'pending') {
+    return <Text>Loading...</Text>
+  }
+
     return (
-        <FlatList style={styles.scrollView}
-          data={data}
-          renderItem={({ item }) => Card({title: item.mission_name, date: item.launch_date_utc, imageUri: item.imageUri, cardId, setCardId})}
-          keyExtractor={card => cardId.toString()}
+        <FlatList<LaunchData> style={styles.scrollView}
+          data={data?.filter((item) => item.links.flickr_images.length > 0)}
+          renderItem={({ item }) => Card({title: item.mission_name, date: item.launch_date_utc, imageUri: item.links.flickr_images[0]})}
+          keyExtractor={card => card.flight_number.toString()}
         />
     );
   };
@@ -107,11 +90,16 @@ const Card = ({title, date, imageUri}:CardType & { imageUri: ImageSourcePropType
         //font: 'Roboto Condensed',
     },
     scrollView: {
-      backgroundColor: 'pink',
+      backgroundColor: 'black',
       marginHorizontal: 25,
       width: '100%'
     },
-    
+    textContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    },
   });
 
   export default Cards;

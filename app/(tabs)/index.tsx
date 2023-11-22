@@ -30,7 +30,7 @@ export default function TabHomePageScreen() {
       <TopBar></TopBar>
       <Cards></Cards>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({

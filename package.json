@@ -15,8 +15,10 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
+    "@react-navigation/native": "^6.1.9",
+    "@tanstack/react-query": "^5.8.4",
+    "axios": "^1.6.2",
     "@react-native-async-storage/async-storage": "1.18.2",
-    "@react-navigation/native": "^6.0.2",
     "expo": "~49.0.15",
     "expo-font": "~11.4.0",
     "expo-linking": "~5.0.2",
@@ -37,6 +39,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@tanstack/eslint-plugin-query": "^5.8.4",
     "@types/react": "~18.2.14",
     "@types/react-native-onboarding-swiper": "^1.1.7",
     "@typescript-eslint/eslint-plugin": "^6.12.0",

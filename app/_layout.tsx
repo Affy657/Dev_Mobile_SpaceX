@@ -1,8 +1,9 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useFonts } from 'expo-font'
 import { SplashScreen, Stack } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useColorScheme } from 'react-native'
 import { OnBoard } from '../components/Onboard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -91,16 +92,18 @@ export default function RootLayout (): React.ReactNode {
 
   return <RootLayoutNav />
 }
-
+const queryClient = new QueryClient()
 function RootLayoutNav (): React.ReactNode {
   const colorScheme = useColorScheme()
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <QueryClientProvider client = {queryClient}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
       </Stack>
+      </QueryClientProvider>
     </ThemeProvider>
   )
 }

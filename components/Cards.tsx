@@ -9,12 +9,24 @@ interface CardType {
   date: string
   imageUri: string
 }
+interface DateOptions {
+  month: 'long'
+  day: 'numeric'
+  year: 'numeric'
+}
+
+function formatDate (dateStr: string): string {
+  const options: DateOptions = { month: 'long', day: 'numeric', year: 'numeric' }
+  const date = new Date(dateStr)
+  return date.toLocaleDateString('fr-FR', options)
+}
 
 const Card = ({ title, date, imageUri }: CardType & { imageUri: string }): React.ReactElement => {
   const href = {
     pathname: '/(tabs)/LaunchDetail/[id]'
     // params: { id: id },
   }
+  const formattedDate = formatDate(date)
 
   console.log(imageUri)
   return (
@@ -25,7 +37,7 @@ const Card = ({ title, date, imageUri }: CardType & { imageUri: string }): React
       >
       <Image style={styles.cardImage} source={{ uri: imageUri }} resizeMode="cover" onError={console.log}/>
       <View style={styles.textContainer}>
-        <Text style={styles.dateText}>{date}</Text>
+        <Text style={styles.dateText}>{formattedDate}</Text>
         <Text style={styles.titleText}>{title}</Text>
       </View>
     </Link>

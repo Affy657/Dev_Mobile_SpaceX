@@ -1,16 +1,16 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
-import { Link, Tabs } from 'expo-router'
-import { Pressable, useColorScheme } from 'react-native'
+import { Tabs } from 'expo-router'
+import { useColorScheme } from 'react-native'
 
 import Colors from '../../constants/Colors'
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
-function TabBarIcon (props: {
+function TabBarIcon (props: Readonly<{
   name: React.ComponentProps<typeof FontAwesome>['name']
   color: string
-}): React.ReactNode {
+}>): React.ReactNode {
   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />
 }
 
@@ -47,7 +47,7 @@ export default function TabLayout (): React.ReactNode {
         name="index"
         options={{
           title: 'Homepage',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />
         }}
       />
     </Tabs>

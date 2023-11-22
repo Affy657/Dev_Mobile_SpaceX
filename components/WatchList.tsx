@@ -1,10 +1,10 @@
-import React from 'react';
-import { Text } from 'react-native';
+import React from 'react'
+import { Text } from 'react-native'
 
-const WatchList = () => {
+const WatchList = (): React.ReactElement => {
   return (
     <Text>WatchList</Text>
-  );
-};
+  )
+}
 
-export default WatchList;
+export default WatchList

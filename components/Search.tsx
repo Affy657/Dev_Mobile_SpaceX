@@ -1,10 +1,10 @@
-import React from 'react';
-import { Text } from 'react-native';
+import React, { type ReactElement } from 'react'
+import { Text } from 'react-native'
 
-const Search = () => {
+const Search = (): ReactElement => {
   return (
     <Text>Search</Text>
-  );
-};
+  )
+}
 
-export default Search;
+export default Search

@@ -1,12 +1,12 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { useColorScheme } from 'react-native';
-import { OnBoard } from '../components/Onboard';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useFonts } from 'expo-font'
+import { SplashScreen, Stack } from 'expo-router'
+import { useEffect, useState } from 'react'
+import { useColorScheme } from 'react-native'
+import { OnBoard } from '../components/Onboard'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -93,8 +93,8 @@ export default function RootLayout (): React.ReactNode {
   return <RootLayoutNav />
 }
 const queryClient = new QueryClient()
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+function RootLayoutNav (): React.ReactNode {
+  const colorScheme = useColorScheme()
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

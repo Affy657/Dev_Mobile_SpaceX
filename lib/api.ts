@@ -8,7 +8,7 @@ export function useLaunches (): UseQueryResult<LaunchData[]> {
     queryKey: ['Launches'],
     queryFn: async () => {
       const { data } = await axios.get(
-        'https://api.spacexdata.com/v3/launches?limit=10&offset=15'
+        'https://api.spacexdata.com/v3/launches?offset=15'
       )
       return data
     }

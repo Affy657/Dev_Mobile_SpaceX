@@ -8,6 +8,7 @@ interface CardType {
   title: string
   date: string
   imageUri: string
+  id: number
 }
 interface DateOptions {
   month: 'long'
@@ -15,16 +16,16 @@ interface DateOptions {
   year: 'numeric'
 }
 
-function formatDate (dateStr: string): string {
+export function formatDate (dateStr: string): string {
   const options: DateOptions = { month: 'long', day: 'numeric', year: 'numeric' }
   const date = new Date(dateStr)
   return date.toLocaleDateString('fr-FR', options)
 }
 
-const Card = ({ title, date, imageUri }: CardType & { imageUri: string }): React.ReactElement => {
+const Card = ({ title, date, imageUri, id }: CardType & { imageUri: string }): React.ReactElement => {
   const href = {
-    pathname: '/(tabs)/LaunchDetail/[id]'
-    // params: { id: id },
+    pathname: '/launchdetail/[id]',
+    params: { id: id.toString() }
   }
   const formattedDate = formatDate(date)
 
@@ -62,7 +63,7 @@ const Cards = (): React.ReactNode => {
   return (
         <FlatList<LaunchData> style={styles.scrollView}
           data={data?.filter((item) => item.links.flickr_images.length > 0)}
-          renderItem={({ item }) => Card({ title: item.mission_name, date: item.launch_date_utc, imageUri: item.links.flickr_images[0] })}
+          renderItem={({ item }) => Card({ title: item.mission_name, date: item.launch_date_utc, imageUri: item.links.flickr_images[0], id: item.flight_number })}
           keyExtractor={card => card.flight_number.toString()}
         />
   )

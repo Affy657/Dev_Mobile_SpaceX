@@ -1,10 +1,11 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 import { Text, View } from '../../components/Themed'
 import React from 'react'
 import YoutubePlayer from 'react-native-youtube-iframe'
 import { formatDate } from '../../components/Cards'
 import { useLocalSearchParams } from 'expo-router'
 import { useLaunche } from '../../lib/api'
+import { ScrollView } from 'react-native-gesture-handler'
 
 interface DataLunchType {
   details: string
@@ -12,22 +13,25 @@ interface DataLunchType {
   missionName: string
   youtubeId: string
 }
+const width = Dimensions.get('screen').width
 
 function LaunchDetail ({ details, date, missionName, youtubeId }: Readonly<DataLunchType>): React.ReactNode {
   const formattedDate = formatDate(date)
+  const height = Dimensions.get('screen').height
 
   return (
     <View style={styles.container}>
       <YoutubePlayer
-        height={300}
+        height={height}
+        width={width * 3.2}
         play={false}
         videoId={youtubeId}
-      />
-      <View style={styles.textContainer}>
+        />
+      <ScrollView style={styles.textContainer}>
         <Text style={styles.dateText}>{formattedDate}</Text>
         <Text style={styles.titleText}>{missionName}</Text>
         <Text style={styles.detailsText}>{details}</Text>
-      </View>
+      </ScrollView>
     </View>
   )
 }
@@ -35,9 +39,6 @@ function LaunchDetail ({ details, date, missionName, youtubeId }: Readonly<DataL
 export default function LaunchDetailData (): React.ReactNode {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { status, data, error } = useLaunche(id)
-  // console.log(status, data, error, isFetching)
-
-  console.log(error)
 
   if (error !== null) {
     return <Text>Error: {error.message}</Text>
@@ -63,6 +64,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  video: {
+    position: 'absolute'
+  },
   titleText: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -79,6 +83,13 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   textContainer: {
-    justifyContent: 'flex-start'
+    width,
+    borderRadius: 20,
+    color: 'white',
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    bottom: 10,
+    padding: 20,
+    paddingTop: 50
   }
 })

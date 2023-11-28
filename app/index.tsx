@@ -6,10 +6,10 @@ import {
   Text,
   Dimensions
 } from 'react-native'
-import { useLaunches } from '../../lib/api'
+import { useLaunches } from '../lib/api'
 
-import TopBar from '../../components/TopBar'
-import Cards from '../../components/Cards'
+// import TopBar from '../../components/TopBar'
+import Cards from '../components/Cards'
 
 // const requestInternetPermission = async () => {
 //   try {
@@ -26,17 +26,19 @@ import Cards from '../../components/Cards'
 //   }
 // }
 
-export default function TabHomePageScreen (): React.ReactNode {
+export default function Root (): React.ReactNode {
   // requestInternetPermission();
   const { status, data, error } = useLaunches()
   // console.log(status, data, error, isFetching)
-  console.log(error)
+  if (error !== null) {
+    console.log(error)
+  }
 
   const { width } = Dimensions.get('window')
 
   return (
     <View style={[styles.scroll, { width }]}>
-      <TopBar></TopBar>
+      {/** <TopBar></TopBar> **/}
       {error !== null && <Text>Error: {error.message}</Text>}
       {status === 'pending' && <Text>Loading...</Text>}
       {data !== undefined && <Cards data={data}></Cards>}

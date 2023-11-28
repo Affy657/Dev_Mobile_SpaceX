@@ -6,14 +6,14 @@ import {
   Dimensions
 } from 'react-native'
 import { useDeferredValue, useEffect, useState } from 'react'
-import { useLaunches } from '../../lib/api'
-import { search } from '../../utils/string'
+import { useLaunches } from '../lib/api'
+import { search } from '../utils/string'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming
 } from 'react-native-reanimated'
-import Cards from '../../components/Cards'
+import Cards from '../components/Cards'
 
 export default function TabSearchScreen (): React.ReactNode {
   const [query, setQuery] = useState<string | undefined>()
@@ -88,9 +88,12 @@ function EditScreenInfo ({ onSearch }: Readonly<EditScreenInfoProps>): React.Rea
           onChangeText={setQuery}
           value={query}
           placeholder="Search a launch name"
+          placeholderTextColor={'#fff'}
           style={{
             borderBottomWidth: 1,
-            borderBottomColor: '#000000',
+            borderBottomColor: '#fff',
+
+            color: '#fff',
             width: Dimensions.get('window').width * 0.80,
             paddingBottom: 10,
             fontSize: 16

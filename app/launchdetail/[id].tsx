@@ -2,13 +2,14 @@ import { StyleSheet } from 'react-native'
 
 import EditScreenInfo from '../../components/EditScreenInfo'
 import { Text, View } from '../../components/Themed'
+import React from 'react'
 
-export default function TabTwoScreen (): React.ReactNode {
+export default function TabOneScreen (): React.ReactNode {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
+      <Text style={styles.title}>LaunchDetail</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
+      <EditScreenInfo path="app/(tabs)/LaunchDetail.tsx" />
     </View>
   )
 }

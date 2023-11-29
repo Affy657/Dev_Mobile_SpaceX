@@ -1,6 +1,6 @@
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
 import { Text, View } from '../../components/Themed'
-import React from 'react'
+import React, { useState } from 'react'
 import YoutubePlayer from 'react-native-youtube-iframe'
 import { formatDate } from '../../components/Cards'
 import { useLocalSearchParams } from 'expo-router'
@@ -14,23 +14,59 @@ interface DataLunchType {
   youtubeId: string
 }
 const width = Dimensions.get('screen').width
+const height = Dimensions.get('screen').height
 
 function LaunchDetail ({ details, date, missionName, youtubeId }: Readonly<DataLunchType>): React.ReactNode {
   const formattedDate = formatDate(date)
-  const height = Dimensions.get('screen').height
+
+  const [showDescription, setShowDescription] = useState(true)
+  const [playVideo, setPlayVideo] = useState(false)
+
+  const handlePress = (): void => {
+    if (playVideo) {
+      setPlayVideo(false)
+      setShowDescription(true)
+    } else {
+      setPlayVideo(true)
+      setShowDescription(false)
+    }
+  }
+
+  const onVideoStateChange = (state: string): void => {
+    if (state === 'paused') {
+      setShowDescription(true)
+      setPlayVideo(false)
+    } else if (state === 'playing') {
+      setShowDescription(false)
+      setPlayVideo(true)
+    }
+  }
 
   return (
     <View style={styles.container}>
-      <YoutubePlayer
-        height={height}
-        width={width * 3.2}
-        play={false}
-        videoId={youtubeId}
-        />
-      <ScrollView style={styles.textContainer}>
+      <View style={styles.videoContainer}>
+        <YoutubePlayer
+          height={height}
+          width={width * 3.2}
+          play={playVideo}
+          videoId={youtubeId}
+          onChangeState={onVideoStateChange}
+          initialPlayerParams={{
+            rel: false,
+            modestbranding: false
+          }}
+          />
+      </View>
+      <ScrollView >
+        <TouchableOpacity style={{ height: 500 }} onPress={handlePress} />
+        {showDescription && (
+        <View style={styles.textContainer}>
+        <View style={styles.bitognio}></View>
         <Text style={styles.dateText}>{formattedDate}</Text>
         <Text style={styles.titleText}>{missionName}</Text>
         <Text style={styles.detailsText}>{details}</Text>
+        </View>
+        )}
       </ScrollView>
     </View>
   )
@@ -64,32 +100,44 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  video: {
-    position: 'absolute'
+  videoContainer: {
+    position: 'absolute',
+    height: height * 0.9
+  },
+  textContainer: {
+    width,
+    backgroundColor: 'black',
+    borderTopStartRadius: 40,
+    borderTopEndRadius: 40,
+    padding: 20
+  },
+  bitognio: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: 80,
+    height: 5,
+    backgroundColor: '#FFFFFF33',
+    borderRadius: 15,
+    marginBottom: 20
+  },
+  dateText: {
+    fontSize: 13,
+    color: '#60BCF0',
+    fontFamily: 'RobotoCondensed',
+    paddingBottom: 4
   },
   titleText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white'
-    // font: 'Roboto Condensed',
-  },
-  dateText: {
-    fontSize: 16,
-    color: '#60BCF0'
-    // font: 'Roboto Condensed',
+    color: 'white',
+    fontFamily: 'RobotoCondensed'
   },
   detailsText: {
     flex: 1,
-    color: 'white'
-  },
-  textContainer: {
-    width,
-    borderRadius: 20,
+    fontSize: 14,
     color: 'white',
-    position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    bottom: 10,
-    padding: 20,
-    paddingTop: 50
+    paddingTop: 14,
+    fontFamily: 'RobotoCondensed'
   }
 })

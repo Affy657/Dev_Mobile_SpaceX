@@ -85,14 +85,14 @@ export default function Navbar ({ navigation, route, options }: Readonly<NativeS
             }}>
               <Link href="/watchlist" asChild>
                 <Pressable>
-                  <SvgWatchlist />
+                  <SvgWatchlist filled={title === 'watchlist'} />
                 </Pressable>
               </Link>
 
               {shownSearchIcon(title) && (
                 <Link href="/search" asChild>
                   <Pressable>
-                    <SvgSearch />
+                    <SvgSearch filled={title === 'search'} />
                   </Pressable>
                 </Link>
               )}

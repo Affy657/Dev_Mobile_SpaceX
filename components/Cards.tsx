@@ -4,6 +4,7 @@ import { Link } from 'expo-router'
 import { type LaunchData } from '../types/api-type'
 import usePagination from '../hooks/usePagination'
 import { LinearGradient } from 'expo-linear-gradient'
+import Animated, { FadeInLeft } from 'react-native-reanimated'
 
 interface CardType {
   title: string
@@ -23,7 +24,7 @@ export function formatDate (dateStr: string): string {
   return date.toLocaleDateString('fr-FR', options)
 }
 
-const Card = ({ title, date, imageUri, id }: CardType & { imageUri: string }): React.ReactElement => {
+const Card = ({ title, date, imageUri, id, index }: CardType & { imageUri: string, index: number }): React.ReactElement => {
   const formattedDate = formatDate(date)
 
   const { width } = Dimensions.get('window')
@@ -73,7 +74,7 @@ const Cards = ({ data }: CardsProps): React.ReactNode => {
     <View style={{ flex: 1, alignItems: 'center' }}>
         <FlatList<LaunchData>
           data={pagination.totalDataShown}
-          renderItem={({ item }) => Card({ title: item.mission_name, date: item.launch_date_utc, imageUri: item.links.flickr_images[0], id: item.flight_number.toString() })}
+          renderItem={({ item, index }) => Card({ title: item.mission_name, date: item.launch_date_utc, imageUri: item.links.flickr_images[0], id: item.flight_number.toString(), index })}
           keyExtractor={card => card.flight_number.toString()}
           onEndReached={() => { pagination.next() }}
         />

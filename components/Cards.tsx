@@ -4,7 +4,6 @@ import { Link } from 'expo-router'
 import { type LaunchData } from '../types/api-type'
 import usePagination from '../hooks/usePagination'
 import { LinearGradient } from 'expo-linear-gradient'
-import Animated, { FadeInLeft } from 'react-native-reanimated'
 
 interface CardType {
   title: string

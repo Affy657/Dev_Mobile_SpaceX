@@ -36,6 +36,7 @@ export default function RootLayout (): React.ReactNode {
   const [readyState, setReadyState] = useState<ReadyState[]>([])
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    RobotoCondensed: require('../assets/fonts/RobotoCondensed-Regular.ttf'),
     ...FontAwesome.font
   })
 

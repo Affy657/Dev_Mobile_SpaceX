@@ -1,13 +1,13 @@
 import {
   FlatList,
   Image,
-  View,
   type ListRenderItemInfo,
   Dimensions,
   Pressable,
   type ImageSourcePropType
 } from 'react-native'
-import { Text } from './Themed'
+import { View } from './Themed'
+import { Body1, RobotoCondensed } from './StyledText'
 import SvgArrowRight from './icons/SvgArrowRight'
 import React from 'react'
 
@@ -32,39 +32,40 @@ function Page ({ text, backgroundImage, onStart }: Readonly<PageProps>): React.R
               flexDirection: 'column'
             }}>
                 <Image source={require('../assets/images/SpaceXLogo.png')} />
-                <Text allowFontScaling={true} style={{
+                <Body1 allowFontScaling={true} style={{
                   fontSize: 16,
                   lineHeight: 21,
                   fontWeight: 'bold',
                   letterSpacing: 0.25,
-                  color: 'white',
                   textAlign: 'center',
                   paddingTop: 20,
                   paddingBottom: 20
                 }}>
                     {text}
-                </Text>
+                </Body1>
                 <Pressable
                     onPress={onStart}
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      backgroundColor: '#FFFFFF',
                       borderRadius: 8,
                       paddingVertical: 10,
                       paddingHorizontal: 20,
-                      marginTop: 20
+                      marginTop: 20,
+                      backgroundColor: '#FFFFFF'
                     }}
                 >
-                    <Text style={{
-                      fontSize: 16,
-                      lineHeight: 21,
-                      fontWeight: 'bold',
-                      letterSpacing: 0.25,
-                      color: 'black',
-                      paddingRight: 10
-                    }}>START</Text>
+                    <RobotoCondensed regularOrMediumOrBold='Bold' textProps={{
+                      style: {
+                        fontSize: 16,
+                        lineHeight: 21,
+                        fontWeight: 'bold',
+                        letterSpacing: 0.25,
+                        paddingRight: 10,
+                        color: '#000000'
+                      }
+                    }}>START</RobotoCondensed>
                     <SvgArrowRight />
                 </Pressable>
             </View>

@@ -1,14 +1,15 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
-import { DarkTheme, /** DefaultTheme, **/ ThemeProvider } from '@react-navigation/native'
+import { DarkTheme, ThemeProvider } from '@react-navigation/native'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useFonts } from 'expo-font'
 import { SplashScreen, Stack } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { SafeAreaView/** , useColorScheme**/, View } from 'react-native'
+import { SafeAreaView, useColorScheme, StyleSheet } from 'react-native'
 import { OnBoard } from '../components/Onboard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Navbar from '../components/Navbar'
 import { StatusBar } from 'expo-status-bar'
+import { View } from '../components/Themed'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -35,8 +36,11 @@ export default function RootLayout (): React.ReactNode {
   const [firstTime, setFirstTime] = useState(true)
   const [readyState, setReadyState] = useState<ReadyState[]>([])
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    RobotoCondensed: require('../assets/fonts/RobotoCondensed-Regular.ttf'),
+    RobotoRegular: require('../assets/fonts/Roboto/Roboto-Regular.ttf'),
+    RobotoLight: require('../assets/fonts/Roboto/Roboto-Light.ttf'),
+    RobotoCondensedRegular: require('../assets/fonts/RobotoCondensed/RobotoCondensed-Regular.ttf'),
+    RobotoCondensedMedium: require('../assets/fonts/RobotoCondensed/RobotoCondensed-Medium.ttf'),
+    RobotoCondensedBold: require('../assets/fonts/RobotoCondensed/RobotoCondensed-Bold.ttf'),
     ...FontAwesome.font
   })
 
@@ -92,22 +96,17 @@ export default function RootLayout (): React.ReactNode {
 }
 const queryClient = new QueryClient()
 function RootLayoutNav (): React.ReactNode {
-  // const colorScheme = useColorScheme()
-  /* screenOptions={{
-          header: Navbar
-          }} */
+  const colorScheme = useColorScheme()
+
+  const reversedColor = colorScheme === 'light'
+    ? 'dark'
+    : 'light'
+
   return (
-    <View style={{
-      backgroundColor: '#000',
-      width: '100%',
-      height: '100%'
-    }}>
-      <StatusBar style={'light'} />
+    <View style={style.fullScreen}>
+      <StatusBar style={reversedColor} />
       <SafeAreaView
-        style={{
-          width: '100%',
-          height: '100%'
-        }}
+        style={style.fullScreen}
       >
         <ThemeProvider value={DarkTheme}>
           <QueryClientProvider client={queryClient}>
@@ -123,3 +122,10 @@ function RootLayoutNav (): React.ReactNode {
     </View>
   )
 }
+
+const style = StyleSheet.create({
+  fullScreen: {
+    width: '100%',
+    height: '100%'
+  }
+})

@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
-import { View, Text, FlatList, Image, Dimensions, Pressable, StyleSheet } from 'react-native'
+import { View, FlatList, Image, Dimensions, Pressable, StyleSheet } from 'react-native'
 import { Link } from 'expo-router'
 import { type LaunchData } from '../types/api-type'
 import usePagination from '../hooks/usePagination'
 import { LinearGradient } from 'expo-linear-gradient'
+import { Heading3, Title2 } from './StyledText'
+import { blueColor } from '../constants/Colors'
 
 interface CardType {
   title: string
@@ -48,8 +50,8 @@ const Card = ({ title, date, imageUri, id, index }: CardType & { imageUri: strin
           colors={['transparent', 'rgba(0,0,0,0.15)']}
           style={styles.gradient}>
           <View style={styles.textContainer}>
-            <Text style={styles.dateText}>{formattedDate}</Text>
-            <Text style={styles.titleText}>{title}</Text>
+            <Title2 style={[styles.dateText, { color: blueColor }]}>{formattedDate}</Title2>
+            <Heading3 style={styles.titleText}>{title}</Heading3>
           </View>
           </LinearGradient>
         </View>
@@ -114,13 +116,11 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 16,
-    color: '#60BCF0',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
-    elevation: 4,
-    fontFamily: 'RobotoCondensed'
+    elevation: 4
   },
   scrollView: {
     backgroundColor: 'black',

@@ -1,10 +1,12 @@
 import { getHeaderTitle } from '@react-navigation/elements'
-import { View, Dimensions, Image, Pressable, Text } from 'react-native'
+import { Dimensions, Image, Pressable } from 'react-native'
 import type { NativeStackHeaderProps } from '@react-navigation/native-stack'
 import SvgArrowLeft from './icons/SvgArrowLeft'
 import SvgWatchlist from './icons/SvgWatchlist'
 import SvgSearch from './icons/SvgSearch'
 import { Link } from 'expo-router'
+import { View } from './Themed'
+import { RobotoCondensed } from './StyledText'
 
 const NAME_MAP: Record<string, string> = {
   watchlist: 'Watch list',
@@ -63,15 +65,18 @@ export default function Navbar ({ navigation, route, options }: Readonly<NativeS
                 justifyContent: 'center',
                 alignItems: 'center'
               }}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: 20,
-                    fontWeight: 'bold'
+                <RobotoCondensed
+                  regularOrMediumOrBold="Medium"
+                  textProps={{
+                    style: {
+                      color: '#fff',
+                      fontSize: 20,
+                      fontWeight: 'bold'
+                    }
                   }}
                 >
                   {title}
-                </Text>
+                </RobotoCondensed>
               </View>
             )}
 

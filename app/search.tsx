@@ -1,8 +1,6 @@
 import {
   StyleSheet,
-  View,
   TextInput,
-  Text,
   Dimensions
 } from 'react-native'
 import { useDeferredValue, useEffect, useState } from 'react'
@@ -14,6 +12,7 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated'
 import Cards from '../components/Cards'
+import { Text, View } from '../components/Themed'
 
 export default function TabSearchScreen (): React.ReactNode {
   const [query, setQuery] = useState<string | undefined>()
@@ -96,7 +95,8 @@ function EditScreenInfo ({ onSearch }: Readonly<EditScreenInfoProps>): React.Rea
             color: '#fff',
             width: Dimensions.get('window').width * 0.80,
             paddingBottom: 10,
-            fontSize: 16
+            fontSize: 20,
+            fontFamily: 'RobotoRegular'
           }}
         />
       </View>

@@ -4,20 +4,21 @@ import {
   type ListRenderItemInfo,
   Dimensions,
   Pressable,
-  type ImageSourcePropType
+  type ImageSourcePropType,
+  type ViewToken
 } from 'react-native'
 import { View } from './Themed'
 import { Body1, RobotoCondensed } from './StyledText'
 import SvgArrowRight from './icons/SvgArrowRight'
-import React from 'react'
+import React, { useState, useRef } from 'react'
+
+const { width, height } = Dimensions.get('window')
 
 interface PageProps {
   backgroundImage: ImageSourcePropType
   text: string
   onStart: () => void
 }
-
-const { width, height } = Dimensions.get('window')
 
 function Page ({ text, backgroundImage, onStart }: Readonly<PageProps>): React.ReactNode {
   return (
@@ -105,6 +106,18 @@ interface onBoardProps {
 }
 
 export function OnBoard ({ onStart }: onBoardProps): React.ReactNode {
+  const [itemToShow, setItemToShow] = useState<number>(0)
+  const viewabilityConfigCallbackPairs = useRef([
+    {
+      viewabilityConfig: {
+        itemVisiblePercentThreshold: 100
+      },
+      onViewableItemsChanged: ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+        if (viewableItems.length === 0) return
+        setItemToShow(viewableItems[0].index ?? 0)
+      }
+    }
+  ])
   const dataPages: PageProps[] = pages.map((page) => ({ ...page, onStart }))
 
   return (
@@ -116,7 +129,45 @@ export function OnBoard ({ onStart }: onBoardProps): React.ReactNode {
                 initialNumToRender={1}
                 pagingEnabled
                 horizontal
+                viewabilityConfig={{
+                  itemVisiblePercentThreshold: 100
+                }}
+                // Use #viewabilityConfigCallbackPairs to not update the state on hot reload
+                // Avoid this error: Changing onViewableItemsChanged on the fly is not supported
+                /** @url https://github.com/facebook/react-native/issues/30171 - Changing onViewableItemsChanged on the fly is not supported #30171 */
+                viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
             />
+            <View style={{ width, paddingBottom: 50, flex: 1, alignItems: 'center' }}>
+                <Dots key={itemToShow} itemToShow={itemToShow} length={dataPages.length} />
+            </View>
+        </View>
+  )
+}
+
+interface DotsProps {
+  itemToShow: number
+  length: number
+}
+
+function Dots ({ itemToShow, length }: DotsProps): React.ReactNode {
+  const arr = new Array(length).fill(0)
+
+  return (
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          {arr.map((_, index) => {
+            return (
+                    <View
+                        key={index}
+                        style={{
+                          width: 8,
+                          height: 8,
+                          borderRadius: 4,
+                          backgroundColor: `rgba(255, 255, 255, ${index === itemToShow ? '1' : '.25'})`,
+                          marginHorizontal: 8
+                        }}
+                    />
+            )
+          })}
         </View>
   )
 }

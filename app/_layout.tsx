@@ -32,6 +32,8 @@ function checkAllList (list: ReadyState[], readyState: ReadyState[]): boolean {
   return list.every((item) => readyState.includes(item))
 }
 
+const queryClient = new QueryClient()
+
 export default function RootLayout (): React.ReactNode {
   const [firstTime, setFirstTime] = useState(true)
   const [readyState, setReadyState] = useState<ReadyState[]>([])
@@ -94,7 +96,7 @@ export default function RootLayout (): React.ReactNode {
 
   return <RootLayoutNav />
 }
-const queryClient = new QueryClient()
+
 function RootLayoutNav (): React.ReactNode {
   const colorScheme = useColorScheme()
 

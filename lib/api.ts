@@ -8,9 +8,9 @@ export function useLaunches (): UseQueryResult<LaunchData[]> {
     queryKey: ['Launches'],
     queryFn: async () => {
       const { data } = await axios.get(
-        'https://api.spacexdata.com/v3/launches?offset=15'
+        'https://api.spacexdata.com/v3/launches?offset'
       )
-      return data
+      return data.reverse()
     }
   })
 }
@@ -29,5 +29,19 @@ export function useLaunche (LauncheId: string): UseQueryResult<LaunchData> {
     queryKey: ['Launches', LauncheId],
     queryFn: async () => await getLauncheById(LauncheId)
     // enabled: !!LauncheId
+  })
+}
+
+// fait un appelle a lapi pour plusieurs lancements en fonction dune liste de id
+const getLaunchesByIds = async (ids: string[]): Promise<LaunchData[]> => {
+  const launches = await Promise.all(ids.map(getLauncheById))
+  return launches
+}
+
+// appel la fonction getLaunchesByIds
+export function useLaunchesByIds (ids: string[]): UseQueryResult<LaunchData[]> {
+  return useQuery({
+    queryKey: ['Launches', ids],
+    queryFn: async () => await getLaunchesByIds(ids)
   })
 }

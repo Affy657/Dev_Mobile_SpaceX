@@ -14,12 +14,14 @@ interface DataLunchType {
   date: string
   missionName: string
   youtubeId: string
+  id: string
 }
 const width = Dimensions.get('screen').width
 const height = Dimensions.get('screen').height
 
-function LaunchDetail ({ details, date, missionName, youtubeId }: Readonly<DataLunchType>): React.ReactNode {
+function LaunchDetail ({ details, date, missionName, youtubeId, id }: Readonly<DataLunchType>): React.ReactNode {
   const formattedDate = formatDate(date)
+  console.log('id', id)
 
   const [showDescription, setShowDescription] = useState(true)
   const [playVideo, setPlayVideo] = useState(false)
@@ -92,6 +94,7 @@ export default function LaunchDetailData (): React.ReactNode {
         date={data.launch_date_utc}
         missionName={data.mission_name}
         youtubeId={data.links.youtube_id}
+        id={data.flight_number.toString()}
         />
   )
 }

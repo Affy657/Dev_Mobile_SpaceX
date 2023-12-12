@@ -4,11 +4,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useFonts } from 'expo-font'
 import { SplashScreen, Stack } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { SafeAreaView, useColorScheme, StyleSheet } from 'react-native'
+import { useColorScheme, StyleSheet } from 'react-native'
 import { OnBoard } from '../components/Onboard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Navbar from '../components/Navbar'
 import { StatusBar } from 'expo-status-bar'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { View } from '../components/Themed'
 
 export {
@@ -107,7 +108,7 @@ function RootLayoutNav (): React.ReactNode {
   return (
     <View style={style.fullScreen}>
       <StatusBar style={reversedColor} />
-      <SafeAreaView
+      <SafeAreaProvider
         style={style.fullScreen}
       >
         <ThemeProvider value={DarkTheme}>
@@ -117,10 +118,11 @@ function RootLayoutNav (): React.ReactNode {
             }}>
               <Stack.Screen name="index" />
               <Stack.Screen name="search" />
+              <Stack.Screen name="watchlist" />
             </Stack>
           </QueryClientProvider>
         </ThemeProvider>
-      </SafeAreaView>
+      </SafeAreaProvider>
     </View>
   )
 }

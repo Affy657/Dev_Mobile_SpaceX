@@ -6,6 +6,8 @@ import { formatDate } from '../../components/Cards'
 import { useLocalSearchParams } from 'expo-router'
 import { useLaunche } from '../../lib/api'
 import { ScrollView } from 'react-native-gesture-handler'
+import { Body3, Heading1, Title2 } from '../../components/StyledText'
+import { blueColor } from '../../constants/Colors'
 
 interface DataLunchType {
   details: string
@@ -64,9 +66,9 @@ function LaunchDetail ({ details, date, missionName, youtubeId, id }: Readonly<D
         {showDescription && (
         <View style={styles.textContainer}>
         <View style={styles.bitognio}></View>
-        <Text style={styles.dateText}>{formattedDate}</Text>
-        <Text style={styles.titleText}>{missionName}</Text>
-        <Text style={styles.detailsText}>{details}</Text>
+        <Title2 style={[styles.dateText, { color: blueColor }]}>{formattedDate}</Title2>
+        <Heading1 style={styles.titleText}>{missionName}</Heading1>
+        <Body3 style={styles.detailsText}>{details}</Body3>
         </View>
         )}
       </ScrollView>
@@ -125,22 +127,13 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   dateText: {
-    fontSize: 13,
-    color: '#60BCF0',
-    fontFamily: 'RobotoCondensed',
     paddingBottom: 4
   },
   titleText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-    fontFamily: 'RobotoCondensed'
+    color: 'white'
   },
   detailsText: {
     flex: 1,
-    fontSize: 14,
-    color: 'white',
-    paddingTop: 14,
-    fontFamily: 'RobotoCondensed'
+    paddingTop: 14
   }
 })

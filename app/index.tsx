@@ -3,11 +3,11 @@ import {
   StyleSheet,
   Text,
   Dimensions,
-  ActivityIndicator,
-  View
+  ActivityIndicator
 } from 'react-native'
 import { useLaunches } from '../lib/api'
 import Cards from '../components/Cards'
+import { View } from '../components/Themed'
 
 const { width } = Dimensions.get('window')
 

@@ -9,7 +9,7 @@ interface RobotoProps {
   children: React.ReactNode
 }
 
-export function Roboto (props: RobotoProps): React.ReactNode {
+export function Roboto (props: Readonly<RobotoProps>): React.ReactNode {
   return (
     <Text {...props.textProps} style={[props.textProps.style, { fontFamily: 'Roboto' + (props.lightOrRegular) }]}>
       {props.children}
@@ -23,7 +23,7 @@ interface RobotoCondensedProps {
   children: React.ReactNode
 }
 
-export function RobotoCondensed (props: RobotoCondensedProps): React.ReactNode {
+export function RobotoCondensed (props: Readonly<RobotoCondensedProps>): React.ReactNode {
   return (
     <Text {...props.textProps} style={[props.textProps.style, { fontFamily: 'RobotoCondensed' + (props.regularOrMediumOrBold) }]}>
       {props.children}

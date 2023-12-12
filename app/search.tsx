@@ -88,16 +88,7 @@ function EditScreenInfo ({ onSearch }: Readonly<EditScreenInfoProps>): React.Rea
           value={query}
           placeholder="Search a launch name"
           placeholderTextColor={'#fff'}
-          style={{
-            borderBottomWidth: 1,
-            borderBottomColor: '#fff',
-
-            color: '#fff',
-            width: Dimensions.get('window').width * 0.80,
-            paddingBottom: 10,
-            fontSize: 20,
-            fontFamily: 'RobotoRegular'
-          }}
+          style={styles.textInput}
         />
       </View>
   )
@@ -108,5 +99,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     width: Dimensions.get('window').width
+  },
+  textInput: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#fff',
+    color: '#fff',
+    width: Dimensions.get('window').width * 0.80,
+    paddingBottom: 10,
+    fontSize: 20,
+    fontFamily: 'RobotoRegular'
   }
 })

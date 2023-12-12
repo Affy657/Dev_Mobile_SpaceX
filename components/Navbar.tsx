@@ -1,5 +1,5 @@
 import { getHeaderTitle } from '@react-navigation/elements'
-import { Dimensions, Image, Pressable } from 'react-native'
+import { Dimensions, Image, Pressable, StyleSheet } from 'react-native'
 import type { NativeStackHeaderProps } from '@react-navigation/native-stack'
 import SvgArrowLeft from './icons/SvgArrowLeft'
 import SvgWatchlist from './icons/SvgWatchlist'
@@ -68,25 +68,9 @@ export default function Navbar ({ navigation, route, options }: Readonly<NativeS
   return (
     <SafeAreaView edges={['top']}>
       <View>
-        <View style={{
-          backgroundColor: '#000',
-          width,
-          height: 50
-        }}>
-          <View style={{
-            width,
-            height: '100%',
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 20
-          }}>
-            <View style={{
-              height: '100%',
-              flex: 1,
-              justifyContent: 'center'
-            }}>
+        <View style={[styles.container, { width }]}>
+          <View style={[styles.subContainer, { width }]}>
+            <View style={styles.brandingContainer}>
               <BrandingLogic canGoBack={canGoBack} handleGoBack={() => {
                 if (canGoBack) navigation.goBack()
                 else navigation.navigate('index')
@@ -94,42 +78,21 @@ export default function Navbar ({ navigation, route, options }: Readonly<NativeS
             </View>
 
             {typeof transcriptedTitle === 'string' && transcriptedTitle !== 'index' && (
-              <View style={{
-                height: '100%',
-                width: '100%',
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}>
+              <View style={styles.titleContainer}>
                 <RobotoCondensed
                   regularOrMediumOrBold="Medium"
-                  textProps={{
-                    style: {
-                      color: '#fff',
-                      fontSize: 20,
-                      fontWeight: 'bold'
-                    }
-                  }}
+                  textProps={{ style: styles.title }}
                 >
                   {transcriptedTitle}
                   </RobotoCondensed>
               </View>
             )}
 
-            <View style={{
-              height: '100%',
-              flex: 1,
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              flexDirection: 'row',
-              gap: 20
-            }}>
+            <View style={styles.iconsContainer}>
               {title === 'launchdetail/[id]' && (
-                <>
-                  <Pressable onPress={() => { void handleWatchlistPress() }}>
-                    <SvgWatchlist filled={isInWatchlist} />
-                  </Pressable>
-                </>
+                <Pressable onPress={() => { void handleWatchlistPress() }}>
+                  <SvgWatchlist filled={isInWatchlist} />
+                </Pressable>
               )}
               {title !== 'launchdetail/[id]' && (
               <Link href="/watchlist" asChild>
@@ -159,7 +122,7 @@ interface BrandingLogicProps {
   handleGoBack: () => void
 }
 
-function BrandingLogic ({ canGoBack, handleGoBack }: BrandingLogicProps): React.ReactNode {
+function BrandingLogic ({ canGoBack, handleGoBack }: Readonly<BrandingLogicProps>): React.ReactNode {
   if (canGoBack) {
     return (
       <Pressable onPress={handleGoBack}>
@@ -178,3 +141,43 @@ function BrandingLogic ({ canGoBack, handleGoBack }: BrandingLogicProps): React.
     />
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#000',
+    height: 50
+  },
+  subContainer: {
+    height: '100%',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20
+  },
+  brandingContainer: {
+    height: '100%',
+    flex: 1,
+    justifyContent: 'center'
+  },
+  titleContainer: {
+    height: '100%',
+    width: '100%',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  iconsContainer: {
+    height: '100%',
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 20
+  },
+  title: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold'
+  }
+})

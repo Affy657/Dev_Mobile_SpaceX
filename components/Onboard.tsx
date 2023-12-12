@@ -5,7 +5,8 @@ import {
   Dimensions,
   Pressable,
   type ImageSourcePropType,
-  type ViewToken
+  type ViewToken,
+  StyleSheet
 } from 'react-native'
 import { View } from './Themed'
 import { Body1, RobotoCondensed } from './StyledText'
@@ -22,50 +23,19 @@ interface PageProps {
 
 function Page ({ text, backgroundImage, onStart }: Readonly<PageProps>): React.ReactNode {
   return (
-        <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'center', width, height }}>
+        <View style={[styles.pageContainer, { width, height }]}>
             <Image source={backgroundImage} style={{ width, height: height * 0.60 }} />
-            <View style={{
-              flex: 1,
-              height,
-              maxHeight: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'column'
-            }}>
+            <View style={[styles.contentContainer, { height }]}>
                 <Image source={require('../assets/images/SpaceXLogo.png')} />
-                <Body1 allowFontScaling={true} style={{
-                  fontSize: 16,
-                  lineHeight: 21,
-                  fontWeight: 'bold',
-                  letterSpacing: 0.25,
-                  textAlign: 'center',
-                  paddingTop: 20,
-                  paddingBottom: 20
-                }}>
+                <Body1 allowFontScaling={true} style={styles.text}>
                     {text}
                 </Body1>
                 <Pressable
                     onPress={onStart}
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderRadius: 8,
-                      paddingVertical: 10,
-                      paddingHorizontal: 20,
-                      marginTop: 20,
-                      backgroundColor: '#FFFFFF'
-                    }}
+                    style={styles.button}
                 >
                     <RobotoCondensed regularOrMediumOrBold='Bold' textProps={{
-                      style: {
-                        fontSize: 16,
-                        lineHeight: 21,
-                        fontWeight: 'bold',
-                        letterSpacing: 0.25,
-                        paddingRight: 10,
-                        color: '#000000'
-                      }
+                      style: styles.buttonText
                     }}>START</RobotoCondensed>
                     <SvgArrowRight />
                 </Pressable>
@@ -101,11 +71,11 @@ function renderItem ({ item }: ListRenderItemInfo<PageProps>): React.ReactElemen
   )
 }
 
-interface onBoardProps {
+interface OnBoardProps {
   onStart: () => void | Promise<void>
 }
 
-export function OnBoard ({ onStart }: onBoardProps): React.ReactNode {
+export function OnBoard ({ onStart }: Readonly<OnBoardProps>): React.ReactNode {
   const [itemToShow, setItemToShow] = useState<number>(0)
   const viewabilityConfigCallbackPairs = useRef([
     {
@@ -121,7 +91,7 @@ export function OnBoard ({ onStart }: onBoardProps): React.ReactNode {
   const dataPages: PageProps[] = pages.map((page) => ({ ...page, onStart }))
 
   return (
-        <View style={{ width, height, backgroundColor: '#000000' }}>
+        <View style={styles.container}>
             <FlatList<PageProps>
                 data={dataPages}
                 showsHorizontalScrollIndicator={false}
@@ -137,7 +107,7 @@ export function OnBoard ({ onStart }: onBoardProps): React.ReactNode {
                 /** @url https://github.com/facebook/react-native/issues/30171 - Changing onViewableItemsChanged on the fly is not supported #30171 */
                 viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
             />
-            <View style={{ width, paddingBottom: 50, flex: 1, alignItems: 'center' }}>
+            <View style={styles.dotContainer}>
                 <Dots key={itemToShow} itemToShow={itemToShow} length={dataPages.length} />
             </View>
         </View>
@@ -149,25 +119,69 @@ interface DotsProps {
   length: number
 }
 
-function Dots ({ itemToShow, length }: DotsProps): React.ReactNode {
-  const arr = new Array(length).fill(0)
+function Dots ({ itemToShow, length }: Readonly<DotsProps>): React.ReactNode {
+  const arr = new Array(length)
+    .fill(0)
+    // map all for the key
+    .map((_, i) => i)
 
   return (
-        <View style={{ flex: 1, flexDirection: 'row' }}>
-          {arr.map((_, index) => {
+        <View style={styles.dotSubContainer}>
+          {arr.map((index) => {
             return (
                     <View
                         key={index}
-                        style={{
-                          width: 8,
-                          height: 8,
-                          borderRadius: 4,
-                          backgroundColor: `rgba(255, 255, 255, ${index === itemToShow ? '1' : '.25'})`,
-                          marginHorizontal: 8
-                        }}
+                        style={[styles.dot, { backgroundColor: `rgba(255, 255, 255, ${index === itemToShow ? '1' : '.25'})` }]}
                     />
             )
           })}
         </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: { width, height, backgroundColor: '#000000' },
+  pageContainer: { flex: 1, justifyContent: 'space-between', alignItems: 'center' },
+  contentContainer: {
+    flex: 1,
+    maxHeight: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column'
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    textAlign: 'center',
+    paddingTop: 20,
+    paddingBottom: 20
+  },
+  button: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginTop: 20,
+    backgroundColor: '#FFFFFF'
+  },
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    paddingRight: 10,
+    color: '#000000'
+  },
+  dotContainer: { width, paddingBottom: 50, flex: 1, alignItems: 'center' },
+  dotSubContainer: { flex: 1, flexDirection: 'row' },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 8
+  }
+})

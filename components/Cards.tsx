@@ -36,13 +36,7 @@ const Card = ({ title, date, imageUri, id, index }: CardType & { imageUri: strin
       params: { id }
     }} asChild>
       <Pressable
-        style={{
-          width: width * 0.90,
-          height: 200,
-          margin: 10,
-          borderRadius: 20,
-          overflow: 'hidden'
-        }}
+        style={[styles.cardPressable, { width: width * 0.90 }]}
       >
         <View style={styles.card}>
           <Image style={styles.cardImage} source={{ uri: imageUri }} resizeMode="cover"/>
@@ -102,6 +96,12 @@ const Cards = ({ data }: CardsProps): React.ReactNode => {
 }
 
 const styles = StyleSheet.create({
+  cardPressable: {
+    height: 200,
+    margin: 10,
+    borderRadius: 20,
+    overflow: 'hidden'
+  },
   card: {
     borderRadius: 20,
     overflow: 'hidden',

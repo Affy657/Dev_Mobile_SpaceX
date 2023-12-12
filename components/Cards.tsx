@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { View, Text, FlatList, Image, Dimensions, Pressable, StyleSheet } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, Text, FlatList, Image, Dimensions, Pressable, StyleSheet, ActivityIndicator } from 'react-native'
 import { Link } from 'expo-router'
 import { type LaunchData } from '../types/api-type'
 import usePagination from '../hooks/usePagination'
@@ -64,10 +64,26 @@ interface CardsProps {
 const Cards = ({ data }: CardsProps): React.ReactNode => {
   const filteredData = data.filter((item) => item.links.flickr_images.length > 0)
   const pagination = usePagination(filteredData, 1, 10)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     pagination.updateData(filteredData)
   }, [filteredData.map((item) => item.flight_number).join(',')])
+
+  const loadMoreData = (): void => {
+    setIsLoading(true)
+    pagination.next()
+    setIsLoading(false)
+  }
+
+  const renderFooter = (): React.JSX.Element | null => {
+    if (!isLoading) return null
+    return (
+      <View style={{ paddingVertical: 20, borderTopWidth: 1 }}>
+        <ActivityIndicator size="large" color="#ffffff"/>
+      </View>
+    )
+  }
 
   return (
     <View style={{ flex: 1, alignItems: 'center' }}>
@@ -75,7 +91,9 @@ const Cards = ({ data }: CardsProps): React.ReactNode => {
           data={pagination.totalDataShown}
           renderItem={({ item, index }) => Card({ title: item.mission_name, date: item.launch_date_utc, imageUri: item.links.flickr_images[0], id: item.flight_number.toString(), index })}
           keyExtractor={card => card.flight_number.toString()}
-          onEndReached={() => { pagination.next() }}
+          onEndReached={loadMoreData}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={renderFooter}
         />
     </View>
   )

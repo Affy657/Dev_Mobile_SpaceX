@@ -4,11 +4,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useFonts } from 'expo-font'
 import { SplashScreen, Stack } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { SafeAreaView/** , useColorScheme**/, View } from 'react-native'
+import { View } from 'react-native'
 import { OnBoard } from '../components/Onboard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Navbar from '../components/Navbar'
 import { StatusBar } from 'expo-status-bar'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -103,12 +104,7 @@ function RootLayoutNav (): React.ReactNode {
       height: '100%'
     }}>
       <StatusBar style={'light'} />
-      <SafeAreaView
-        style={{
-          width: '100%',
-          height: '100%'
-        }}
-      >
+      <SafeAreaProvider>
         <ThemeProvider value={DarkTheme}>
           <QueryClientProvider client={queryClient}>
             <Stack screenOptions={{
@@ -116,10 +112,11 @@ function RootLayoutNav (): React.ReactNode {
             }}>
               <Stack.Screen name="index" />
               <Stack.Screen name="search" />
+              <Stack.Screen name="watchlist" />
             </Stack>
           </QueryClientProvider>
         </ThemeProvider>
-      </SafeAreaView>
+      </SafeAreaProvider>
     </View>
   )
 }

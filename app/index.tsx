@@ -1,46 +1,26 @@
 import React from 'react'
 import {
-  // PermissionsAndroid,
   StyleSheet,
-  View,
   Text,
-  Dimensions
+  Dimensions,
+  ActivityIndicator,
+  View
 } from 'react-native'
 import { useLaunches } from '../lib/api'
-
-// import TopBar from '../../components/TopBar'
 import Cards from '../components/Cards'
 
-// const requestInternetPermission = async () => {
-//   try {
-//     const granted = await PermissionsAndroid.request(
-//       PermissionsAndroid.PERMISSIONS.INTERNET
-//     )
-//     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-//       console.log('You can use the internet')
-//     } else {
-//       console.log('Internet permission denied')
-//     }
-//   } catch (err) {
-//     console.warn('err :' + err)
-//   }
-// }
+const { width } = Dimensions.get('window')
 
 export default function Root (): React.ReactNode {
-  // requestInternetPermission();
   const { status, data, error } = useLaunches()
-  // console.log(status, data, error, isFetching)
   if (error !== null) {
     console.log(error)
   }
 
-  const { width } = Dimensions.get('window')
-
   return (
     <View style={[styles.scroll, { width }]}>
-      {/** <TopBar></TopBar> **/}
       {error !== null && <Text>Error: {error.message}</Text>}
-      {status === 'pending' && <Text>Loading...</Text>}
+      {status === 'pending' && <ActivityIndicator size="large" color="#ffffff" />}
       {data !== undefined && <Cards data={data}></Cards>}
     </View>
   )
@@ -49,6 +29,7 @@ export default function Root (): React.ReactNode {
 const styles = StyleSheet.create({
   scroll: {
     flex: 1,
+    width,
     alignItems: 'center',
     justifyContent: 'center'
   }

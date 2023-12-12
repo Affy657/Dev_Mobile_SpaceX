@@ -5,12 +5,18 @@ import SvgArrowLeft from './icons/SvgArrowLeft'
 import SvgWatchlist from './icons/SvgWatchlist'
 import SvgSearch from './icons/SvgSearch'
 import { Link } from 'expo-router'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { addToWatchlist, removeFromWatchlist } from './watchlistHelpers'
+import React, { useEffect, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const NAME_MAP: Record<string, string> = {
   watchlist: 'Watch list',
   search: 'Search',
-  launchDetail: 'StarLink Mission'
+  'launchdetail/[id]': 'StarLink Mission'
 }
+
+const WATCHLIST_KEY = 'WATCHLIST_IDS'
 
 const shownSearchIcon = (routeName: string): boolean => {
   if (routeName === 'index' || routeName === 'watchlist' || routeName === 'search') {
@@ -22,6 +28,35 @@ const shownSearchIcon = (routeName: string): boolean => {
 
 export default function Navbar ({ navigation, route, options }: Readonly<NativeStackHeaderProps>): React.ReactNode {
   const title = getHeaderTitle(options, route.name)
+  const [isInWatchlist, setIsInWatchlist] = useState(false)
+
+  useEffect(() => {
+    void checkIfInWatchlist()
+  }, [route.params])
+
+  const checkIfInWatchlist = async (): Promise<void> => {
+    if (route.params === undefined) return
+    const params = route.params as Record<string, string>
+    if (params.id === undefined) return
+    const storedIds = await AsyncStorage.getItem(WATCHLIST_KEY)
+    if (storedIds !== null) {
+      const ids = JSON.parse(storedIds)
+      setIsInWatchlist(ids.includes(params.id))
+    }
+  }
+
+  const handleWatchlistPress = async (): Promise<void> => {
+    // Logique pour ajouter/supprimer de la watchlist
+    // et mise à jour de l'état isInWatchlist
+    const params: { id: string } = route.params as { id: string }
+    if (isInWatchlist) {
+      const updatedIds = await removeFromWatchlist(params.id)
+      setIsInWatchlist(updatedIds.includes(params.id))
+    } else {
+      const updatedIds = await addToWatchlist(params.id)
+      setIsInWatchlist(updatedIds.includes(params.id))
+    }
+  }
 
   const { width } = Dimensions.get('window')
   const canGoBack = navigation.canGoBack()
@@ -29,6 +64,7 @@ export default function Navbar ({ navigation, route, options }: Readonly<NativeS
   const transcriptedTitle = NAME_MAP[title]
 
   return (
+    <SafeAreaView edges={['top']}>
       <View>
         <View style={{
           backgroundColor: '#000',
@@ -70,7 +106,7 @@ export default function Navbar ({ navigation, route, options }: Readonly<NativeS
                     fontWeight: 'bold'
                   }}
                 >
-                  {title}
+                  {transcriptedTitle}
                 </Text>
               </View>
             )}
@@ -83,12 +119,20 @@ export default function Navbar ({ navigation, route, options }: Readonly<NativeS
               flexDirection: 'row',
               gap: 20
             }}>
+              {title === 'launchdetail/[id]' && (
+                <>
+                  <Pressable onPress={() => { void handleWatchlistPress() }}>
+                    <SvgWatchlist filled={isInWatchlist} />
+                  </Pressable>
+                </>
+              )}
+              {title !== 'launchdetail/[id]' && (
               <Link href="/watchlist" asChild>
                 <Pressable>
                   <SvgWatchlist filled={title === 'watchlist'} />
                 </Pressable>
               </Link>
-
+              )}
               {shownSearchIcon(title) && (
                 <Link href="/search" asChild>
                   <Pressable>
@@ -101,6 +145,7 @@ export default function Navbar ({ navigation, route, options }: Readonly<NativeS
           </View>
         </View>
       </View>
+      </SafeAreaView>
   )
 }
 
